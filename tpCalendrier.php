@@ -69,22 +69,38 @@
                 $number = cal_days_in_month(CAL_GREGORIAN, $indexOfMonth, $_POST['year']);
                 echo 'nombre de jours : ' . $number;
         ?>
-        <table class="container centered">
+        <table class="container">
+        <tr>
+            <th> Lundi </th>
+            <th> Mardi </th>
+            <th> Mercredi </th>
+            <th> Jeudi </th>
+            <th> Vendredi </th>
+            <th> Samedi </th>
+            <th> Dimanche </th>
+        </tr>
         <tr>
         <?php
+                
                 for($i = 1; $i < $number +1; $i++)
                 {
                     // $i.$indexOfMonth.$_POST['year']
                     $incrDate = date($i.'-'.$indexOfMonth.'-'.$_POST['year']);
                     // echo $incrDate . '<br/>';
                     $incrDate = strtotime($incrDate);
-                    var_dump($incrDate);
-                    echo ' <td>' . $i . ' jour : ' . date('D', $incrDate) . '</td>';
+                    $jour = date('N', $incrDate);
+                    // if($i === 1 && $jour === 1 ) //// ARRETE ICI LE 19/07/2019
+                    // {
+                    //     echo '</td> <td>';
+                    // }
+                    echo ' <td>' . $i . ' c\'est ' . $jour . '</td>';
                     if($i % 7 === 0)
                     {
                         echo '</tr> <br/> <tr>';
                     }
+                    
                 }
+                
         ?> 
         </tr>
         </table> 
