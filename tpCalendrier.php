@@ -9,26 +9,92 @@
         <!-- Materialize CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <title> TP Php Partie 09 </title>
-        
     </head>
     <body>
-        <h1>Php - TP Part 09</h1>
+        <h1>Php - Part 09 - TP</h1>
+
+        <?php
+        include('menu.php');
+        ?>
 
         <form id="methodPostIndex" method="post" action="tpCalendrier.php">
-        <div class="row">
-            <div class="col s2 offset-s3">
-                <label for="month">Choix Mois</label>
-                <select name="month" id="month" required >
-                    <option value="" disabled selected>Civilité</option>
-                    <option value="Mois">
-                    <?php
-                    // créer tableau puis foreach 
-                    ?>
-                    </option>
-                </select>
+            <!-- Test avec attribut HTML  -->
+            <div class="row">
+                <div class="col s2">
+                    <fieldset>
+                        <legend>Input de type date </legend>
+                        <input type="date"/>
+                    </fieldset>
+                </div>
+                <div class="col s3 offset-s1">
+                    <label for="month">Choix du Mois</label>
+                    <select name="month" id="month" required >
+                        <?php
+                        $month = [
+                            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                            'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+                        ];
+                        foreach($month as $element)
+                        {
+                            echo '<option value="' . $element .'">' . $element . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                
+                <div class="col s3">
+                    <label for="year">Choix de l'Année</label>
+                    <select name="year" id="year" required >
+                        <?php
+                        foreach(range(date('Y', strtotime('-10 years')), date('Y', strtotime('+10 years'))) as $year)
+                        {
+                            echo '<option value="' . $year . '">' . $year . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
             </div>
-        </div>
+            <button type="submit" class="btn">Valider</button>
         </form>
+        <!-- Calendrier -->
+        <?php
+            
+            if((isset($_POST['month'])) && (isset($_POST['year'])))
+            {
+                // Vérification de $_POST
+                // print_r($_POST);
+                $indexOfMonth = (array_search($_POST['month'], $month)+1);
+                echo 'index du mois : ' . $indexOfMonth . '<br/>';
+                // génération du tableau
+                $number = cal_days_in_month(CAL_GREGORIAN, $indexOfMonth, $_POST['year']);
+                echo 'nombre de jours : ' . $number;
+        ?>
+        <table class="container centered">
+        <tr>
+        <?php
+                for($i = 1; $i < $number +1; $i++)
+                {
+                    // $i.$indexOfMonth.$_POST['year']
+                    $incrDate = date($i.'-'.$indexOfMonth.'-'.$_POST['year']);
+                    // echo $incrDate . '<br/>';
+                    $incrDate = strtotime($incrDate);
+                    var_dump($incrDate);
+                    echo ' <td>' . $i . ' jour : ' . date('D', $incrDate) . '</td>';
+                    if($i % 7 === 0)
+                    {
+                        echo '</tr> <br/> <tr>';
+                    }
+                }
+        ?> 
+        </tr>
+        </table> 
+        <?php
+            }
+
+        include('menu.php');
+        ?>
+        
+
         <!-- jQuery -->
         <script
             src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

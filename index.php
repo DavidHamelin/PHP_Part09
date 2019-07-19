@@ -13,6 +13,9 @@
     </head>
     <body>
         <h1>Php - Part 09</h1>
+        <?php
+        include('menu.php');
+        ?>
 
         <?php
             // Ex 01
@@ -104,9 +107,6 @@
             echo 'Date du jour moins 20 jours avec -20days = ' . date('d-m-Y', strtotime('-20 days'));
 
         ?>
-        <br/>
-        <br/>
-        <a class="btn container" href="tpCalendrier.php">TP</a>
         <br/>
         <br/>
             <!-- jQuery -->
