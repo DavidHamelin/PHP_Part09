@@ -34,9 +34,13 @@
                             'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
                             'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
                         ];
+
                         foreach($month as $element)
                         {
-                            echo '<option value="' . $element .'">' . $element . '</option>';
+                            ?>
+                            <option value="<?= $element ?>" <?= isset($_POST['month']) && $_POST['month'] == $element ? 'selected' : '' ?>><?= $element ?></option>
+                            <?php
+                            // echo '<option value="' . $element .'">' . $element . '</option>';
                         }
                         ?>
                     </select>
@@ -48,7 +52,10 @@
                         <?php
                         foreach(range(date('Y', strtotime('-10 years')), date('Y', strtotime('+10 years'))) as $year)
                         {
-                            echo '<option value="' . $year . '">' . $year . '</option>';
+                            ?>
+                            <option value="<?= $year ?>" <?= isset($_POST['year']) && $_POST['year'] == $year ? 'selected' : '' ?>><?= $year ?></option>
+                            <?php
+                           /*  echo '<option value="' . $year . '">' . $year . '</option>'; */
                         }
                         ?>
                     </select>
@@ -63,42 +70,60 @@
             {
                 // Vérification de $_POST
                 // print_r($_POST);
+
                 $indexOfMonth = (array_search($_POST['month'], $month)+1);
                 echo 'index du mois : ' . $indexOfMonth . '<br/>';
                 // génération du tableau
                 $number = cal_days_in_month(CAL_GREGORIAN, $indexOfMonth, $_POST['year']);
-                echo 'nombre de jours : ' . $number;
+                echo 'nombre de jours : ' . $number . '<br/>';
+                echo 'date utilisée : ' . $_POST['month'] . ' ' . $_POST['year'] . '<br/>';
         ?>
         <table class="container">
         <tr>
-            <th> Lundi </th>
-            <th> Mardi </th>
-            <th> Mercredi </th>
-            <th> Jeudi </th>
-            <th> Vendredi </th>
-            <th> Samedi </th>
-            <th> Dimanche </th>
+            <?php
+            $daysWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche' ];
+            foreach($daysWeek as $week)
+            {
+                echo '<th>' . $week . '</th>';
+            }
+            ?>
+            
         </tr>
         <tr>
         <?php
+                // nombre de jour d'un mois
+                $firstDay = '01-'.$indexOfMonth .'-' . $_POST['year'];
+                $firstDay = strtotime($firstDay);
+                $testDay = date('N',$firstDay);
+                $j=1;
+
+
+
+
                 
-                for($i = 1; $i < $number +1; $i++)
+                for($i = 1; $i < $number + 1 + ($testDay-1); $i++)
                 {
                     // $i.$indexOfMonth.$_POST['year']
-                    $incrDate = date($i.'-'.$indexOfMonth.'-'.$_POST['year']);
+                    // $incrDate = date($i.'-'.$indexOfMonth.'-'.$_POST['year']);
                     // echo $incrDate . '<br/>';
-                    $incrDate = strtotime($incrDate);
-                    $jour = date('N', $incrDate);
+                    // $incrDate = strtotime($incrDate);
+                    // $jour = date('N', $incrDate); // début du mois
                     // if($i === 1 && $jour === 1 ) //// ARRETE ICI LE 19/07/2019
                     // {
                     //     echo '</td> <td>';
                     // }
-                    echo ' <td>' . $i . ' c\'est ' . $jour . '</td>';
+                    
+                    if ($i >= $testDay){
+                        echo '<td>' . $j . '</td>';
+                        $j++;
+                    } else {
+                        echo '<td></td>';
+                    }
+
                     if($i % 7 === 0)
                     {
                         echo '</tr> <br/> <tr>';
                     }
-                    
                 }
                 
         ?> 
